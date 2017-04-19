@@ -1,4 +1,5 @@
-﻿#Set Global ASC Decisions
+# See https://github.com/Javanite/Azure-Security-Center for PS Module being used in script.
+#Set Global ASC Policy Decisions
 
 $secemail = "security@customdomain.com,user@customdomain.com"
 $secphone = "1112223333"

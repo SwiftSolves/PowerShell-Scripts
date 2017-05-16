@@ -10,7 +10,7 @@ $datacollect = "on"
 
 #Download file and place in C:\Temp
 
-New-Item -ItemType Directory -Path C:\Temp
+New-Item -ItemType Directory -Path C:\Temp -ErrorAction SilentlyContinue
 
 cd C:\Temp
 
@@ -22,12 +22,15 @@ Invoke-WebRequest "https://raw.githubusercontent.com/Javanite/Azure-Security-Cen
 Import-Module "C:\temp\Azure-Security-Center.psm1"
 
 #Prompt Azure Owner for credetials to login and select azure subscriptions
-Get-ASCCredential
+#Get-ASCCredential - Used in the older version of module no longer defined, now uses Login-ASC
+
+Login-ASC
 
 #Loop through sunbscriptions on same AAD tenant and apply ASC Policy settings defined in variables
 (Get-AzureRmSubscription).subscriptionId | foreach {
         Set-Variable -Name asc_subscriptionId -Value $_ -Scope Global 
-        Set-ASCPolicy -PolicyName default -JSON (Build-ASCJSON -Policy -AllOn -SecurityContactEmail $secemail -SecurityContactPhone $secphone -SecurityContactNotificationsOn $secnotify -SecurityContactSendToAdminOn $ownernotify -DataCollection $datacollect )
+        #$ASCpolicyname = Get-ASCPolicy | select -First 1
+        Set-ASCPolicy -PolicyName default -JSON (Build-ASCJSON -Type Policy -PolicyName default -AllOn -SecurityContactEmail $secemail -SecurityContactPhone $secphone -SecurityContactNotificationsOn $secnotify -SecurityContactSendToAdminOn $ownernotify -DataCollection $datacollect )
     }
 
 #Launch ASC in portal.azure.com for confirmation of setting changes. 

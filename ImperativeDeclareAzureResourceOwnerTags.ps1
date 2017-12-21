@@ -1,6 +1,6 @@
 ﻿<#
     .DESCRIPTION
-        An runbook which finds the deploym,ent owner of a Azure resource and applies an owner Tag to the Azure resource gets all the ARM resources using the Run As Account (Service Principal)
+        An runbook which finds the deployment owner of a Azure resource and applies an owner Tag to the Azure resource gets all the ARM resources using the Run As Account (Service Principal)
 
     .NOTES
         AUTHOR: Nathan Swift

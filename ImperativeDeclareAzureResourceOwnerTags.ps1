@@ -1,3 +1,4 @@
+
 <#
     .DESCRIPTION
         An runbook which finds the deployment owner of a Azure resource and applies an owner Tag to the Azure resource gets all the ARM resources using the Run As Account (Service Principal)
@@ -47,6 +48,7 @@ $azurerescop = $azureresc.ResourceType + "/write"
 $azurerescvalues = Get-AzureRmLog -StartTime (Get-Date).AddDays(-89) -ResourceId $azureresc.ResourceId -DetailedOutput  -Status Succeeded | Where-Object OperationName -contains $azurerescop
 
 #sometimes the operations logs have multiple entries pick the latest record
+##Needs## If or Switch Logic to determine User identity vs SPN or somthing else. 
 $owner = $azurerescvalues[0].Caller
 
 If ($owner -eq $null)
@@ -55,7 +57,7 @@ write-host "Owner equals null"
 } Else {
 
 
-#Obtain existing tags and apply existing Tags
+#Obtain existing tags and apply existing Tags plus Owner Tag
 $tags = (Get-AzureRmResource -ResourceId $azureresc.ResourceId).Tags
 $tags += @{Owner=$owner}
 Set-AzureRmResource -ResourceId $azureresc.ResourceId -Tag $tags -Force

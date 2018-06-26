@@ -27,7 +27,7 @@ Write-Host $datetime
 # File check to overwrite existing vm inventory collection
 $filecheck = Get-FileHash -Path $path
 
-If ($filecheck.Path -eq $path
+If ($filecheck.Path -eq $path)
 {
 Remove-Item -Path $path
 Write-host "Removed Previous File"

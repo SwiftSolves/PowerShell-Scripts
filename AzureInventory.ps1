@@ -16,6 +16,7 @@
 
 # Path and filename for output data file being generated.
 $path = C:\temp\subsazuinventory.txt
+$csvpath = "C:\temp\azuinventory.csv"
 
 # Authenticate Piece
 Login-AzureRmAccount
@@ -30,6 +31,19 @@ $filecheck = Get-FileHash -Path $path
 If ($filecheck.Path -eq $path)
 {
 Remove-Item -Path $path
+Write-host "Removed Previous File"
+}
+else
+{
+Write-host "No Previous File Found"
+}
+
+# File check to overwrite existing vm inventory collection
+$filecheck2 = Get-FileHash -Path $csvpath
+
+If ($filecheck2.Path -eq $csvpath)
+{
+Remove-Item -Path $csvpath
 Write-host "Removed Previous File"
 }
 else
@@ -145,3 +159,6 @@ $datetime = Get-Date
 Write-Host $datetime
 
 # Once done import the data into excel
+
+$CSV = Import-Csv -Path $path
+$CSV | Export-Csv -Path $csvpath -NoTypeInformation

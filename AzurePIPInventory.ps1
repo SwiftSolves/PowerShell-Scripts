@@ -5,6 +5,17 @@
 # Use it at your own risk
 ################################################################################
 
+<# 
+Current Services:
+
+PaaS SQL DB
+PaaS MySQL DB
+Cosmos DB
+Functions
+Storage Account
+
+#>
+
 <#  Possible Futures:
  
 #>
@@ -147,7 +158,66 @@ $vmstring | Out-File $outputFile -append -force
 }
 
 
+# RESEARCH https://docs.microsoft.com/en-us/azure/sql-database/sql-database-connectivity-architecture
+ElseIf ($Type -eq "Microsoft.Sql/servers") {
 
+$URL = $Resource.Name + ".database.windows.net"
+
+$ResourcePIP = Get-DnsEntry $URL
+
+# "Subscription,ResourceGroup,Type,ResourceName,Location,MACAddress,IPAdress,Allocation,NumberOfCores,MemoryMB,VMSize,Publisher,Offer,Sku"
+# Write out VM line of data collected and place into csv
+$vmstring = "$($sub.Name),$($Resource.ResourceGroupName),$($Type),$($Resource.name),$($ResourcePIP)"
+
+#Write into and append into output file
+$vmstring | Out-File $outputFile -append -force
+
+}
+
+ElseIf ($Type -eq "Microsoft.DBforMySQL/servers") {
+
+$URL = $Resource.Name + ".mysql.database.azure.com"
+
+$ResourcePIP = Get-DnsEntry $URL
+
+# "Subscription,ResourceGroup,Type,ResourceName,Location,MACAddress,IPAdress,Allocation,NumberOfCores,MemoryMB,VMSize,Publisher,Offer,Sku"
+# Write out VM line of data collected and place into csv
+$vmstring = "$($sub.Name),$($Resource.ResourceGroupName),$($Type),$($Resource.name),$($ResourcePIP)"
+
+#Write into and append into output file
+$vmstring | Out-File $outputFile -append -force
+
+}
+
+ElseIf ($Type -eq "Microsoft.Web/sites/functions") {
+
+$URL = $Resource.Name + ".azurewebsites.net"
+
+$ResourcePIP = Get-DnsEntry $URL
+
+# "Subscription,ResourceGroup,Type,ResourceName,Location,MACAddress,IPAdress,Allocation,NumberOfCores,MemoryMB,VMSize,Publisher,Offer,Sku"
+# Write out VM line of data collected and place into csv
+$vmstring = "$($sub.Name),$($Resource.ResourceGroupName),$($Type),$($Resource.name),$($ResourcePIP)"
+
+#Write into and append into output file
+$vmstring | Out-File $outputFile -append -force
+
+}
+
+ElseIf ($Type -eq "Microsoft.DocumentDB/databaseAccounts") {
+
+$URL = $Resource.Name + "documents.azure.com"
+
+$ResourcePIP = Get-DnsEntry $URL
+
+# "Subscription,ResourceGroup,Type,ResourceName,Location,MACAddress,IPAdress,Allocation,NumberOfCores,MemoryMB,VMSize,Publisher,Offer,Sku"
+# Write out VM line of data collected and place into csv
+$vmstring = "$($sub.Name),$($Resource.ResourceGroupName),$($Type),$($Resource.name),$($ResourcePIP)"
+
+#Write into and append into output file
+$vmstring | Out-File $outputFile -append -force
+
+}
 
 }
 

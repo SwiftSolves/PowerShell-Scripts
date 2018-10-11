@@ -1,19 +1,19 @@
 ﻿Login-AzureRmAccount
 
-Set-AzureRMContext -Subscription "SwiftSolves"
+Set-AzureRMContext -Subscription ""
 
 
 # Your Resource Group where the nics need to be changed
-$RGnics = "rgHacks4Claps"
+$RGnics = ""
 
 # Your Resource Group where the existing VNET with new Ip Address Space is
-$RGVNET = "rgHacks4Claps"
+$RGVNET = ""
 
 # Your VNET name with new Ip Address Space is
-$VNETname = "rgHacks4Claps-vnet"
+$VNETname = ""
 
 # Your VNET and new Subnet to change Nics to with new address space
-$newsubnetname = "hdiinsights"
+$newsubnetname = ""
 
 # Your Nic Ip config Name it is typically "ipconfig1"
 $Nicipname = "ipconfig1"

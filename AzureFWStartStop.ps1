@@ -77,7 +77,7 @@ Elseif ($process -match "start"){
     $vnet = Get-AzureRmVirtualNetwork -Name $vnetname -ResourceGroupName $vnetrg
     $publicip = Get-AzureRmPublicIpAddress -Name $pipname -ResourceGroupName $piprg
     $azfw.Allocate($vnet,$publicip)
-    Set-AzureRmFirewall
+    Set-AzureRmFirewall -AzureFirewall $azfw
     Write-Output ("Azure Firewal $azfw.name Started")
 }
 

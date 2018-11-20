@@ -55,7 +55,6 @@ $ErrorActionPreference = "stop"
         }
     }
 
-Set-AzureRMContext -Subscription SwiftSolves
 
 ##Manual Testing
 #$WebhookData = Get-Content 'C:\temp\activitylog2.json' | Out-String | ConvertFrom-Json

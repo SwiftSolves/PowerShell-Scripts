@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
 This runbook recieves IPs to block in an data array from a Azure Security Center PlayBook it then applies them to NSG Rules and a NSG that is protecting the Application Gateway.
 
@@ -59,51 +59,60 @@ $ErrorActionPreference = "stop"
 ##Manual Testing
 #$WebhookData = Get-Content 'C:\temp\activitylog2.json' | Out-String | ConvertFrom-Json
 
-#Take Webhook Data and taketody of Data in alert and convert JSON into PS Object
 Write-Host ($WebhookData)
 
-
+#Take Webhook Data and take request body of Data in alert and convert JSON into PS Object
 $WebhookRequestBody = $WebhookData.RequestBody | ConvertFrom-Json
 
 #Take Webhook Data and taketody of Data in alert and convert JSON into PS Object
 Write-Host ($WebhookRequestBody)
 
+#Ensure Activity Log Alert from ASC pertains to applicationGateways
+$mgmturl = $WebhookRequestBody.data.context.activityLog.properties.managementURL -split "/"
 
-#store the Rows results of alert data into a variable
-$SourceIps = $WebhookRequestBody.data.context.activityLog.properties.sourceIPs
+#Conditional check to make sure it matches to applicationGateway to execure NSG rules.
+if ($WebhookRequestBody.data.context.activityLog.properties.resourceType -eq "Networking" -and $mgmturl[9] -contains "applicationGateways"){
 
-#Create an Array from the string
-$SourceIps = $SourceIps -split ","
+    #store the Rows results of alert data into a variable
+    $SourceIps = $WebhookRequestBody.data.context.activityLog.properties.sourceIPs
 
-#Take Webhook Data and taketody of Data in alert and convert JSON into PS Object
-Write-Host ($SourceIps)
+    #Create an Array from the string
+    $SourceIps = $SourceIps -split ","
 
-#Static Variables
-$NSGname = "YOUR NSG NAME"
-$NSGrg = "YOUR NSG RESOURCE GROUP NAME"
-$i = 1
+    #Take Webhook Data and taketody of Data in alert and convert JSON into PS Object
+    Write-Host ($SourceIps)
+
+    #Static Variables
+    $NSGname = "YOUR NSG NAME"
+    $NSGrg = "YOUR NSG RESOURCE GROUP NAME"
+    $i = 1
 
 
-foreach ($pip in $SourceIps) {
+    foreach ($pip in $SourceIps) {
 
-    $i++
-    Write-Host ("counter is :$i")
-    Write-Host ($pip)
+        $i++
+        Write-Host ("counter is :$i")
+        Write-Host ($pip)
 
-    #/32 CIDR to PIP for NSG rule
-    $pipcidr = $pip+"/32"
+        #/32 CIDR to PIP for NSG rule
+        $pipcidr = $pip+"/32"
 
-    Write-Host ($pipcidr)
+        Write-Host ($pipcidr)
 
-    #obtain the NSG you want to add a rule to - Set you unique NSG anme and ResourceGroupName
-    $NSG = Get-AzureRmNetworkSecurityGroup -Name $NSGname -ResourceGroupName $NSGrg
+        #obtain the NSG you want to add a rule to - Set you unique NSG anme and ResourceGroupName
+        $NSG = Get-AzureRmNetworkSecurityGroup -Name $NSGname -ResourceGroupName $NSGrg
 
-    #Check the custom rules count and add to the next priority so oes not overlap with existing priority rule
-    $priority = $NSG.SecurityRules.Priority.Count + 801 + $i
+        #Check the custom rules count and add to the next priority so oes not overlap with existing priority rule
+        $priority = $NSG.SecurityRules.Priority.Count + 801 + $i
 
-    $rulename = New-Guid
-    Write-Host ($rulename)
+        $rulename = New-Guid
+        Write-Host ($rulename)
 
-    #Construct the NSG Rule based of the pity found and the PIP CIDR found above and apply the new rule to the NSG - Set you unique NSG anme and ResourceGroupName
-    Get-AzureRmNetworkSecurityGroup -Name $NSGname -ResourceGroupName $NSGrg | Add-AzureRmNetworkSecurityRuleConfig -Name "activitylogrb_$pip" -Direction Inbound -Priority $priority -Access Deny -SourceAddressPrefix $pipcidr -SourcePortRange '*' -DestinationAddressPrefix '*' -DestinationPortRange '*' -Protocol '*' | Set-AzureRmNetworkSecurityGroup
+        #Construct the NSG Rule based of the pity found and the PIP CIDR found above and apply the new rule to the NSG - Set you unique NSG anme and ResourceGroupName
+        Get-AzureRmNetworkSecurityGroup -Name $NSGname -ResourceGroupName $NSGrg | Add-AzureRmNetworkSecurityRuleConfig -Name "activitylogrb_$pip" -Direction Inbound -Priority $priority -Access Deny -SourceAddressPrefix $pipcidr -SourcePortRange '*' -DestinationAddressPrefix '*' -DestinationPortRange '*' -Protocol '*' | Set-AzureRmNetworkSecurityGroup
+    }
+}
+Else
+{
+    Write-Host ("Logic Conditions not matched")
 }

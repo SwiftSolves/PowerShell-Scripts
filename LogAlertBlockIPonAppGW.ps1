@@ -57,7 +57,7 @@ $ErrorActionPreference = "stop"
 
 
 ##Manual Testing
-$WebhookData = Get-Content 'C:\Users\naswif\Documents\alertip14.json' | Out-String | ConvertFrom-Json
+#$WebhookData = Get-Content 'C:\temp\alertip14.json' | Out-String | ConvertFrom-Json
 
 #Static Variables
 $NSGname = "YOUR NSG NAME"

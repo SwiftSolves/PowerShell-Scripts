@@ -79,8 +79,8 @@ $SourceIps = $SourceIps -split ","
 Write-Host ($SourceIps)
 
 #Static Variables
-$NSGname = "APPGW-NSG"
-$NSGrg = "rgPaaS-Security"
+$NSGname = "YOUR NSG NAME"
+$NSGrg = "YOUR NSG RESOURCE GROUP NAME"
 $i = 1
 
 

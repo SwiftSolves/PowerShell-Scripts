@@ -1,13 +1,13 @@
 ﻿param
 (
     [Parameter (Mandatory=$false)]
-    [object] $fscredobj,
+    [object] $inputfscredobj,
 
-    [string] $fsurl
+    [string] $inputfsurl
 )
 
 Remove-PSDrive -Name S -Force
 
 start-sleep -Seconds 60
 
-New-PSDrive -Name S -PSProvider FileSystem -Root "\\$($fsurl)\samplefileshare" -Credential $fscredobj -Persist
+New-PSDrive -Name S -PSProvider FileSystem -Root "\\$($inputfsurl)\samplefileshare" -Credential $inputfscredobj -Persist

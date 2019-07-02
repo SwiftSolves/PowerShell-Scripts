@@ -1,7 +1,7 @@
 ﻿<#
 
     .REQUIREMENTS
-        That the Log analytiocs Workspace have the ServiceMap Solution and WireData Solution installed.
+        That the Log Analytics Workspace have the ServiceMap Solution and WireData Solution installed.
 
     .DESCRIPTION
         A script that will export some of the ServiceMap Details around inboun and outbound connections in you enviroment for further analysis. 

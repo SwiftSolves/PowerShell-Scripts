@@ -10,25 +10,25 @@
 Param
 (
   [Parameter (Mandatory= $true)]
-  [String] $process = "",
+  [String] $process = "stop",
   
   [Parameter (Mandatory= $true)]
-  [String] $azfwname = "",
+  [String] $azfwname = "azurefw",
 
   [Parameter (Mandatory= $true)]
-  [String] $azfwrg = "",
+  [String] $azfwrg = "rgNetworking",
 
   [Parameter (Mandatory= $false)]
-  [String] $vnetname = "",
+  [String] $vnetname = "VNET-HUB",
 
   [Parameter (Mandatory= $false)]
-  [String] $vnetrg = "",
+  [String] $vnetrg = "rgNetworking",
 
   [Parameter (Mandatory= $false)]
-  [String] $pipname = "",
+  [String] $pipname = "azureFirewalls-ip",
 
   [Parameter (Mandatory= $false)]
-  [String] $piprg = ""
+  [String] $piprg = "rgNetworking"
 
 )
 
@@ -56,7 +56,7 @@ catch {
     }
 }
 
-Set-AzureRMContext -Subscription 
+Set-AzureRMContext -Subscription "YOUR SUBSCRIPTION NAME HERE"
 
 # Azure FW Object
 $azfw = Get-AzureRmFirewall -Name $azfwname -ResourceGroupName $azfwrg

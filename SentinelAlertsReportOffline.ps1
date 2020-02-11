@@ -2,6 +2,8 @@
 ## Author:      Nathan Swift
 ## Date:        02.11.2020
 ## Description: Downloads Sentinel Rules and generates a report
+## Needs PS Core 6 or 7 and Module powershell-yaml 
+# Install-Module -Name powershell-yaml
 #########################################################################################
 
 # download the Azure Sentinel Github zip

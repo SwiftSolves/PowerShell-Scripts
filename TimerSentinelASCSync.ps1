@@ -21,7 +21,7 @@ $alerts = Get-AzSecurityAlert | Where-Object {$_.State -eq "Active" -and $_.Repo
 # loop through closed incidents and compare against ASC alerts and find a match
 ForEach ($incident in $incidents){
 
-    # Room for improvement use Switch instead of nested forwach loops
+    # Room for improvement use Switch instead of nested foreach loops
     Foreach ($alert in $alerts){
 
         ## Matching condition titles must match, timestamps on the second must match
